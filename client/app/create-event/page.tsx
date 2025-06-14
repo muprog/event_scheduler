@@ -1,301 +1,9 @@
 // 'use client'
 // import axios from '../../utils/axios'
 // import React, { useState } from 'react'
-
-// const weekdays = [
-//   { label: 'Sunday', value: 0 },
-//   { label: 'Monday', value: 1 },
-//   { label: 'Tuesday', value: 2 },
-//   { label: 'Wednesday', value: 3 },
-//   { label: 'Thursday', value: 4 },
-//   { label: 'Friday', value: 5 },
-//   { label: 'Saturday', value: 6 },
-// ]
-// import { jwtDecode } from 'jwt-decode'
-
-// interface DecodedToken {
-//   email: string
-// }
-
-// export default function EventCreationForm() {
-//   const token =
-//     typeof window !== 'undefined' ? localStorage.getItem('token') : null
-//   const decoded: DecodedToken | null = token ? jwtDecode(token) : null
-//   const createdBy = decoded?.email || ''
-
-//   const [name, setName] = useState('')
-//   const [description, setDescription] = useState('')
-//   const [startDateTime, setStartDateTime] = useState('')
-//   const [endDateTime, setEndDateTime] = useState('')
-//   const [recurrenceType, setRecurrenceType] = useState<
-//     'none' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom'
-//   >('none')
-//   const [intervalUnit, setIntervalUnit] = useState<
-//     'days' | 'weeks' | 'months' | 'years'
-//   >('days')
-
-//   const [interval, setInterval] = useState(1)
-//   const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([])
-//   const [relativeWeekNumber, setRelativeWeekNumber] = useState(1)
-//   const [relativeDayOfWeek, setRelativeDayOfWeek] = useState(0)
-
-//   const toggleWeekday = (day: number) => {
-//     setSelectedWeekdays((prev) =>
-//       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
-//     )
-//   }
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault()
-
-//     if (
-//       !name ||
-//       !startDateTime ||
-//       (!endDateTime && recurrenceType !== 'none') ||
-//       !description
-//     ) {
-//       alert('Please provide event name, description, and date/time')
-//       return
-//     }
-
-//     let recurrence: any = { frequency: recurrenceType }
-
-//     if (recurrenceType === 'custom') {
-//       recurrence = {
-//         frequency: 'custom',
-//         interval,
-//         intervalUnit,
-//         daysOfWeek: selectedWeekdays.length > 0 ? selectedWeekdays : undefined,
-//         relativePattern: {
-//           weekNumber: relativeWeekNumber,
-//           dayOfWeek: relativeDayOfWeek,
-//         },
-//       }
-//     }
-
-//     if (recurrenceType === 'none') {
-//       recurrence = { frequency: 'none' }
-//     }
-
-//     try {
-//       if (
-//         recurrenceType !== 'none' &&
-//         new Date(endDateTime) <= new Date(startDateTime)
-//       ) {
-//         alert('End time must be after start time.')
-//         return
-//       }
-//       const payload: any = {
-//         name,
-//         description: description.trim(),
-//         startDateTime: new Date(startDateTime).toISOString(),
-//         recurrence,
-//         createdBy,
-//       }
-
-//       if (recurrenceType !== 'none' && endDateTime) {
-//         payload.endDateTime = new Date(endDateTime).toISOString()
-//       }
-
-//       const response = await axios.post('/events', payload)
-
-//       if (response.status === 201) {
-//         alert('Event created successfully')
-//         setName('')
-//         setDescription('')
-//         setStartDateTime('')
-//         setRecurrenceType('none')
-//         setInterval(1)
-//         setSelectedWeekdays([])
-//         setRelativeWeekNumber(1)
-//         setRelativeDayOfWeek(0)
-//       } else {
-//         alert('Failed to create event')
-//       }
-//     } catch (error: any) {
-//       alert(error.response?.data?.message || 'Error creating event')
-//     }
-//   }
-
-//   return (
-//     <div className='mt-8 bg-white shadow rounded-lg p-6'>
-//       <h2 className='text-xl font-semibold mb-4'>Create New Event</h2>
-//       <form onSubmit={handleSubmit} className='space-y-4'>
-//         <div>
-//           <label className='block font-medium mb-1'>Event Name</label>
-//           <input
-//             type='text'
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             className='w-full border rounded px-3 py-2'
-//             required
-//           />
-//         </div>
-
-//         <div>
-//           <label className='block font-medium mb-1'>Description</label>
-//           <textarea
-//             required
-//             value={description}
-//             onChange={(e) => setDescription(e.target.value)}
-//             className='w-full border rounded px-3 py-2'
-//           />
-//         </div>
-
-//         <div>
-//           <label className='block font-medium mb-1'>Start Date & Time</label>
-//           <input
-//             type='datetime-local'
-//             value={startDateTime}
-//             onChange={(e) => setStartDateTime(e.target.value)}
-//             className='w-full border rounded px-3 py-2'
-//             required
-//           />
-//         </div>
-
-//         {recurrenceType !== 'none' && (
-//           <div>
-//             <label className='block font-medium mb-1'>End Date & Time</label>
-//             <input
-//               type='datetime-local'
-//               value={endDateTime}
-//               onChange={(e) => setEndDateTime(e.target.value)}
-//               className='w-full border rounded px-3 py-2'
-//             />
-//           </div>
-//         )}
-
-//         <div>
-//           <label className='block font-medium mb-1'>Recurrence</label>
-//           <select
-//             value={recurrenceType}
-//             onChange={(e) => setRecurrenceType(e.target.value as any)}
-//             className='w-full border rounded px-3 py-2'
-//           >
-//             <option value='none'>None (One-time event)</option>
-//             <option value='daily'>Daily</option>
-//             <option value='weekly'>Weekly</option>
-//             <option value='monthly'>Monthly</option>
-//             <option value='yearly'>Yearly</option>
-//             <option value='custom'>Custom (Complex)</option>
-//           </select>
-//         </div>
-
-//         {recurrenceType === 'custom' && (
-//           <>
-//             <div>
-//               <label className='block font-medium mb-1'>Interval</label>
-//               <div className='flex space-x-2'>
-//                 <input
-//                   type='number'
-//                   min={1}
-//                   value={interval}
-//                   onChange={(e) => setInterval(parseInt(e.target.value) || 1)}
-//                   className='border rounded px-3 py-2 w-1/2'
-//                 />
-//                 <select
-//                   value={intervalUnit}
-//                   onChange={(e) =>
-//                     setIntervalUnit(
-//                       e.target.value as 'days' | 'weeks' | 'months' | 'years'
-//                     )
-//                   }
-//                   className='border rounded px-3 py-2 w-1/2'
-//                 >
-//                   <option value='days'>Day(s)</option>
-//                   <option value='weeks'>Week(s)</option>
-//                   <option value='months'>Month(s)</option>
-//                   <option value='years'>Year(s)</option>
-//                 </select>
-//               </div>
-//             </div>
-
-//             <div>
-//               <label className='block font-medium mb-1'>
-//                 Select Weekdays (optional)
-//               </label>
-//               <div className='flex flex-wrap gap-2'>
-//                 {weekdays.map(({ label, value }) => (
-//                   <label
-//                     key={value}
-//                     className='inline-flex items-center space-x-1'
-//                   >
-//                     <input
-//                       type='checkbox'
-//                       checked={selectedWeekdays.includes(value)}
-//                       onChange={() => toggleWeekday(value)}
-//                     />
-//                     <span>{label}</span>
-//                   </label>
-//                 ))}
-//               </div>
-//             </div>
-
-//             {recurrenceType === 'custom' && intervalUnit === 'months' && (
-//               <div>
-//                 <label className='block font-medium mb-1'>
-//                   Relative Date Pattern (e.g., 2nd Friday of the month)
-//                 </label>
-//                 <div className='flex space-x-2'>
-//                   <select
-//                     value={relativeWeekNumber}
-//                     onChange={(e) =>
-//                       setRelativeWeekNumber(parseInt(e.target.value))
-//                     }
-//                     className='border rounded px-3 py-2'
-//                   >
-//                     {[1, 2, 3, 4, 5].map((num) => (
-//                       <option key={num} value={num}>
-//                         {num === 5
-//                           ? 'Last'
-//                           : `${num}${
-//                               num === 1
-//                                 ? 'st'
-//                                 : num === 2
-//                                 ? 'nd'
-//                                 : num === 3
-//                                 ? 'rd'
-//                                 : 'th'
-//                             }`}
-//                       </option>
-//                     ))}
-//                   </select>
-
-//                   <select
-//                     value={relativeDayOfWeek}
-//                     onChange={(e) =>
-//                       setRelativeDayOfWeek(parseInt(e.target.value))
-//                     }
-//                     className='border rounded px-3 py-2'
-//                   >
-//                     {weekdays.map(({ label, value }) => (
-//                       <option key={value} value={value}>
-//                         {label}
-//                       </option>
-//                     ))}
-//                   </select>
-//                 </div>
-//               </div>
-//             )}
-//           </>
-//         )}
-
-//         <button
-//           type='submit'
-//           className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition'
-//         >
-//           Create Event
-//         </button>
-//       </form>
-//     </div>
-//   )
-// }
-
-// 'use client'
-// import axios from '../../utils/axios'
-// import React, { useState } from 'react'
 // import { jwtDecode } from 'jwt-decode'
 // import { CalendarPlus, Repeat } from 'lucide-react'
+// import toast from 'react-hot-toast'
 
 // const weekdays = [
 //   { label: 'Sunday', value: 0 },
@@ -347,7 +55,7 @@
 //       (!endDateTime && recurrenceType !== 'none') ||
 //       !description
 //     ) {
-//       alert('Please fill out all required fields.')
+//       toast.error('Please fill out all required fields.')
 //       return
 //     }
 
@@ -375,7 +83,7 @@
 //         recurrenceType !== 'none' &&
 //         new Date(endDateTime) <= new Date(startDateTime)
 //       ) {
-//         alert('End date/time must be after start date/time.')
+//         toast.error('End date/time must be after start date/time.')
 //         return
 //       }
 
@@ -394,7 +102,7 @@
 //       const response = await axios.post('/events', payload)
 
 //       if (response.status === 201) {
-//         alert('✅ Event created successfully!')
+//         toast.success('✅ Event created successfully!')
 //         setName('')
 //         setDescription('')
 //         setStartDateTime('')
@@ -405,10 +113,10 @@
 //         setRelativeWeekNumber(1)
 //         setRelativeDayOfWeek(0)
 //       } else {
-//         alert('❌ Failed to create event.')
+//         toast.error('❌ Failed to create event.')
 //       }
 //     } catch (error: any) {
-//       alert(error.response?.data?.message || 'Error creating event.')
+//       toast.error(error.response?.data?.message || 'Error creating event.')
 //     }
 //   }
 
@@ -607,7 +315,7 @@ import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { CalendarPlus, Repeat } from 'lucide-react'
 import toast from 'react-hot-toast'
-
+import { isAxiosError } from 'axios'
 const weekdays = [
   { label: 'Sunday', value: 0 },
   { label: 'Monday', value: 1 },
@@ -620,6 +328,24 @@ const weekdays = [
 
 interface DecodedToken {
   email: string
+}
+interface Recurrence {
+  frequency: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom'
+  interval?: number
+  intervalUnit?: 'days' | 'weeks' | 'months' | 'years'
+  daysOfWeek?: number[]
+  relativePattern?: {
+    weekNumber: number
+    dayOfWeek: number
+  }
+}
+interface EventPayload {
+  name: string
+  description: string
+  startDateTime: string
+  endDateTime?: string
+  recurrence: Recurrence
+  createdBy: string
 }
 
 export default function EventCreationForm() {
@@ -662,7 +388,7 @@ export default function EventCreationForm() {
       return
     }
 
-    let recurrence: any = { frequency: recurrenceType }
+    let recurrence: Recurrence = { frequency: recurrenceType }
 
     if (recurrenceType === 'custom') {
       recurrence = {
@@ -690,7 +416,7 @@ export default function EventCreationForm() {
         return
       }
 
-      const payload: any = {
+      const payload: EventPayload = {
         name,
         description: description.trim(),
         startDateTime: new Date(startDateTime).toISOString(),
@@ -718,8 +444,14 @@ export default function EventCreationForm() {
       } else {
         toast.error('❌ Failed to create event.')
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error creating event.')
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data?.message || 'Error creating event.')
+      } else if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('An unknown error occurred.')
+      }
     }
   }
 
@@ -794,7 +526,9 @@ export default function EventCreationForm() {
           </label>
           <select
             value={recurrenceType}
-            onChange={(e) => setRecurrenceType(e.target.value as any)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setRecurrenceType(e.target.value as typeof recurrenceType)
+            }
             className='mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400'
           >
             <option value='none'>None (One-time event)</option>
@@ -866,7 +600,7 @@ export default function EventCreationForm() {
               <div className='mt-4 flex gap-4'>
                 <select
                   value={relativeWeekNumber}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                     setRelativeWeekNumber(parseInt(e.target.value))
                   }
                   className='w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400'

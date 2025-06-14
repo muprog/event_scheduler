@@ -182,8 +182,8 @@ export default function LandingPage() {
                 Flexible Recurrence
               </h3>
               <p className='text-gray-600 mb-4'>
-                From simple daily events to complex patterns like "every 3rd
-                Thursday of the month".
+                From simple daily events to complex patterns like &quot;every
+                3rd Thursday of the month&quot;.
               </p>
               <ul className='space-y-2'>
                 <li className='flex items-center'>

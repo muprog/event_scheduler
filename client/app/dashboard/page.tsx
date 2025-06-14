@@ -110,10 +110,8 @@ export default function DashboardPage() {
           setError('Failed to fetch user data')
           router.push('/login')
         }
-      } catch (err: any) {
-        setError(
-          err.response?.data?.message || 'Session expired, please login again'
-        )
+      } catch (err: unknown) {
+        console.log(err)
         router.push('/login')
       } finally {
         setLoading(false)
