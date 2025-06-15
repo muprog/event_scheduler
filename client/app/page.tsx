@@ -18,8 +18,6 @@ export default function LandingPage() {
     'features' | 'how-it-works' | 'pricing'
   >('features')
   axios.defaults.baseURL = process.env.BACKEND_URL
-    ? process.env.BACKEND_URL
-    : 'http://localhost:5000'
   axios.defaults.withCredentials = true
 
   return (
