@@ -25,19 +25,7 @@ export default function RegisterPage() {
         router.push('/login')
       }
     } catch (err: unknown) {
-      if (err && typeof err === 'object' && 'response' in err) {
-        const error = err as {
-          response?: { data?: { message?: string } }
-          message?: string
-        }
-        alert(
-          error.response?.data?.message ||
-            error.message ||
-            'Failed to delete event'
-        )
-      } else {
-        alert('Failed to delete event')
-      }
+      console.log(err)
     }
   }
 

@@ -6,9 +6,7 @@ import jwt from 'jsonwebtoken'
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'
 const registerUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body
-
   try {
-    // Optional: check if user already exists
     const existingUser = await User.findOne({ email })
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' })
@@ -18,7 +16,7 @@ const registerUser = async (req: Request, res: Response) => {
     const newUser = new User({
       username,
       email,
-      password: hashedPassword, // You should hash this before saving
+      password: hashedPassword,
     })
 
     await newUser.save()
@@ -86,37 +84,8 @@ const getProfile = async (req: Request, res: Response) => {
   }
 }
 
-// Get authenticated user data
-// const getUser = async (req: Request, res: Response) => {
-//   try {
-//     // Verify JWT token from Authorization header
-//     const token = req.headers.authorization?.split(' ')[1]
-//     if (!token) {
-//       return res.status(401).json({ message: 'Authentication required' })
-//     }
-
-//     const decoded = jwt.verify(token, JWT_SECRET) as { id: string }
-//     const user = await User.findById(decoded.id).select('-password')
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' })
-//     }
-
-//     res.status(200).json({ user })
-//   } catch (error: any) {
-//     console.error('Get user error:', error)
-//     if (error.name === 'TokenExpiredError') {
-//       return res
-//         .status(401)
-//         .json({ message: 'Session expired, please login again' })
-//     }
-//     res.status(500).json({ message: 'Server error' })
-//   }
-// }
-
 const getUser = async (req: Request, res: Response) => {
   try {
-    // Get token from Authorization header
     const authHeader = req.headers.authorization
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Authentication required' })
@@ -142,79 +111,9 @@ const getUser = async (req: Request, res: Response) => {
   }
 }
 
-// Logout endpoint (optional - for token invalidation if needed)
 const logoutUser = async (req: Request, res: Response) => {
-  // In a real app, you might want to implement token blacklisting here
   res.status(200).json({ message: 'Logout successful' })
 }
-
-// const postEvents = async (req: Request, res: Response) => {
-//   try {
-//     const {
-//       title,
-//       description,
-//       startDate,
-//       endDate,
-//       recurrenceRule,
-//       createdBy,
-//     } = req.body
-
-//     if (!title || !startDate || !createdBy) {
-//       return res.status(400).json({ message: 'Missing required fields' })
-//     }
-
-//     // Basic validation could be improved here
-
-//     const event = new Event({
-//       title,
-//       description,
-//       startDate: new Date(startDate),
-//       endDate: endDate ? new Date(endDate) : undefined,
-//       recurrenceRule: recurrenceRule || null,
-//       createdBy,
-//     })
-
-//     await event.save()
-
-//     res.status(201).json({ message: 'Event created successfully', event })
-//   } catch (error) {
-//     console.error(error)
-//     res.status(500).json({ message: 'Server error' })
-//   }
-// }
-
-// const postEvents = async (req: Request, res: Response) => {
-//   try {
-//     const {
-//       name,
-//       description,
-//       startDateTime,
-//       endDateTime,
-//       recurrence,
-//       createdBy, // fallback if you’re not sending this yet
-//     } = req.body
-
-//     if (!name || !startDateTime || !createdBy) {
-//       return res.status(400).json({ message: 'Missing required fields' })
-//     }
-
-//     const event = new Event({
-//       title: name,
-//       description,
-//       startDate: new Date(startDateTime),
-//       endDateTime: endDateTime ? new Date(endDateTime) : undefined,
-//       recurrenceRule: recurrence || null,
-//       createdBy,
-//     })
-
-//     await event.save()
-
-//     res.status(201).json({ message: 'Event created successfully', event })
-//   } catch (error) {
-//     console.error(error)
-//     res.status(500).json({ message: 'Server error' })
-//   }
-// }
 
 const postEvents = async (req: Request, res: Response) => {
   try {
