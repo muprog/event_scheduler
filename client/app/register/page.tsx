@@ -15,7 +15,7 @@ export default function RegisterPage() {
     setError('')
 
     try {
-      const res = await axios.post('/register', {
+      const res = await axios.post('/register1', {
         username,
         email,
         password,
