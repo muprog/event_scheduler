@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-// import axios from '../utils/axios'
 import {
   FiCalendar,
   FiRepeat,
@@ -17,9 +16,6 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = useState<
     'features' | 'how-it-works' | 'pricing'
   >('features')
-  // axios.defaults.baseURL = process.env.BACKEND_URL
-  // axios.defaults.withCredentials = true
-
   return (
     <div className='min-h-screen flex flex-col bg-white'>
       <Head>
