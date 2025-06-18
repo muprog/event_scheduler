@@ -17,6 +17,7 @@ const {
   deleteEvent,
   getEdit,
   putEdit,
+  test,
 } = require('../controllers/controller')
 
 const allowedOrigins: string[] = [
@@ -48,6 +49,7 @@ router.use(
   // })
   cors(corsOptions)
 )
+router.post('/', test)
 router.post('/register', registerUser)
 router.post('/login', loginUser)
 router.get('/profile', getProfile)

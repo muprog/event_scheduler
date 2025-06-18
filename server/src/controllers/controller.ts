@@ -271,6 +271,9 @@ const putEdit = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Failed to update event' })
   }
 }
+const test = (req: Request, res: Response) => {
+  res.send('hello')
+}
 
 module.exports = {
   registerUser,
