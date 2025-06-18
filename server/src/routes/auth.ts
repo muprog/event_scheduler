@@ -49,6 +49,7 @@ router.use(
   // })
   cors(corsOptions)
 )
+router.get('/', test)
 router.post('/', test)
 router.post('/register', registerUser)
 router.post('/login', loginUser)

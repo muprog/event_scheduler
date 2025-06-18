@@ -17,5 +17,4 @@ mongoose
     })
   })
   .catch((err) => console.error(err))
-
 app.use('/', require('./routes/auth'))
