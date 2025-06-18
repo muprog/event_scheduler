@@ -288,4 +288,5 @@ module.exports = {
   deleteEvent,
   getEdit,
   putEdit,
+  test,
 }
