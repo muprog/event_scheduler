@@ -21,12 +21,12 @@ export default function RegisterPage() {
         email,
         password,
       })
-
+      if (res.status === 400) {
+        toast.error(res.data.message)
+      }
       if (res.status === 201) {
         toast.success('Registered successfully!')
         router.push('/login')
-      } else if (res.status === 400) {
-        toast.error(res.data.message)
       }
     } catch (err: unknown) {
       console.log(err)
