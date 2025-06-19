@@ -25,19 +25,19 @@ export default function LoginPage() {
         router.push('/dashboard')
       }
     } catch (err: unknown) {
-      // if (err && typeof err === 'object' && 'response' in err) {
-      //   const error = err as {
-      //     response?: { data?: { message?: string } }
-      //     message?: string
-      //   }
-      //   alert(
-      //     error.response?.data?.message ||
-      //       error.message ||
-      //       'Check you connection'
-      //   )
-      // } else {
-      //   alert('Check your connection')
-      // }
+      if (err && typeof err === 'object' && 'response' in err) {
+        const error = err as {
+          response?: { data?: { message?: string } }
+          message?: string
+        }
+        alert(
+          error.response?.data?.message ||
+            error.message ||
+            'Check you connection'
+        )
+      } else {
+        alert('Check your connection')
+      }
       console.log(err)
     }
   }
