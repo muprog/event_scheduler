@@ -30,13 +30,13 @@ export default function LoginPage() {
           response?: { data?: { message?: string } }
           message?: string
         }
-        alert(
+        setError(
           error.response?.data?.message ||
             error.message ||
             'Check you connection'
         )
       } else {
-        alert('Check your connection')
+        setError('Check your connection')
       }
       console.log(err)
     }
