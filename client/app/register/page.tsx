@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import axios from '../../utils/axios'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 export default function RegisterPage() {
   const [username, setUsername] = useState('')
@@ -22,7 +23,10 @@ export default function RegisterPage() {
       })
 
       if (res.status === 201) {
+        toast.success('Registered successfully!')
         router.push('/login')
+      } else if (res.status === 400) {
+        toast.error(res.data.message)
       }
     } catch (err: unknown) {
       console.log(err)
