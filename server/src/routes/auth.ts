@@ -20,34 +20,34 @@ const {
   test,
 } = require('../controllers/controller')
 
-const allowedOrigins: string[] = [
-  process.env.FRONTEND_URL!,
-  process.env.FRONTEND_URLL!,
-  'https://www.google.com',
-  'https://www.google.com/',
-  'http://localhost:3000/',
-  'http://localhost:3000',
-].filter(Boolean)
+// const allowedOrigins: string[] = [
+//   process.env.FRONTEND_URL!,
+//   process.env.FRONTEND_URLL!,
+//   'https://www.google.com',
+//   'https://www.google.com/',
+//   'http://localhost:3000/',
+//   'http://localhost:3000',
+// ].filter(Boolean)
 
-const corsOptions: CorsOptions = {
-  origin: (origin: string | undefined, callback) => {
-    if (!origin) return callback(null, true)
+// const corsOptions: CorsOptions = {
+//   origin: (origin: string | undefined, callback) => {
+//     if (!origin) return callback(null, true)
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true)
-    } else {
-      return callback(new Error(`Not allowed by CORS: ${origin}`))
-    }
-  },
-  credentials: true,
-}
+//     if (allowedOrigins.includes(origin)) {
+//       return callback(null, true)
+//     } else {
+//       return callback(new Error(`Not allowed by CORS: ${origin}`))
+//     }
+//   },
+//   credentials: true,
+// }
 
 router.use(
-  // cors({
-  //   origin: process.env.FRONTEND_URL,
-  //   credentials: true,
-  // })
-  cors(corsOptions)
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+  // cors(corsOptions)
 )
 router.get('/', test)
 router.post('/', test)
