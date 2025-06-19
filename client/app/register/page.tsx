@@ -29,7 +29,11 @@ export default function RegisterPage() {
         router.push('/login')
       }
     } catch (err: unknown) {
-      console.log(err)
+      // console.log(err)
+      const axiosError = err as { response?: { data?: { message?: string } } }
+      const message =
+        axiosError.response?.data?.message || 'Registration failed'
+      toast.error(message)
     }
   }
 
