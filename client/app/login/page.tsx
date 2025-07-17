@@ -5,14 +5,47 @@ import axios from '../../utils/axios'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
 
+  // const handleLogin = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setError('')
+
+  //   try {
+  //     const res = await axios.post('/login', {
+  //       email,
+  //       password,
+  //     })
+
+  //     if (res.status === 200) {
+  //       localStorage.setItem('token', res.data.token)
+  //       router.push('/dashboard')
+  //     }
+  //   } catch (err: unknown) {
+  //     if (err && typeof err === 'object' && 'response' in err) {
+  //       const error = err as {
+  //         response?: { data?: { message?: string } }
+  //         message?: string
+  //       }
+  //       setError(
+  //         error.response?.data?.message ||
+  //           error.message ||
+  //           'Check you connection'
+  //       )
+  //     } else {
+  //       setError('Check your connection')
+  //     }
+  //     console.log(err)
+  //   }
+  // }
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsSubmitting(true)
 
     try {
       const res = await axios.post('/login', {
@@ -39,6 +72,8 @@ export default function LoginPage() {
         setError('Check your connection')
       }
       console.log(err)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -67,6 +102,7 @@ export default function LoginPage() {
               id='email'
               type='email'
               required
+              disabled={isSubmitting}
               className='w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +120,7 @@ export default function LoginPage() {
               id='password'
               type='password'
               required
+              disabled={isSubmitting}
               className='w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -92,9 +129,10 @@ export default function LoginPage() {
 
           <button
             type='submit'
+            disabled={isSubmitting}
             className='w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300 font-semibold'
           >
-            Sign In
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
           </button>
 
           <p className='text-center text-sm text-gray-500 mt-4'>

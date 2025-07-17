@@ -5,15 +5,44 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 export default function RegisterPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setError('')
+
+  //   try {
+  //     const res = await axios.post('/register1', {
+  //       username,
+  //       email,
+  //       password,
+  //     })
+  //     if (res.status === 400) {
+  //       toast.error(res.data.message)
+  //     }
+  //     if (res.status === 201) {
+  //       toast.success('Registered successfully!')
+  //       router.push('/login')
+  //     }
+  //   } catch (err: unknown) {
+  //     // console.log(err)
+  //     const axiosError = err as { response?: { data?: { message?: string } } }
+  //     const message =
+  //       axiosError.response?.data?.message || 'Registration failed'
+  //     toast.error(message)
+  //   }
+  // }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsSubmitting(true)
 
     try {
       const res = await axios.post('/register1', {
@@ -29,11 +58,12 @@ export default function RegisterPage() {
         router.push('/login')
       }
     } catch (err: unknown) {
-      // console.log(err)
       const axiosError = err as { response?: { data?: { message?: string } } }
       const message =
         axiosError.response?.data?.message || 'Registration failed'
       toast.error(message)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -71,6 +101,7 @@ export default function RegisterPage() {
             <input
               type='email'
               required
+              disabled={isSubmitting}
               className='w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +115,7 @@ export default function RegisterPage() {
             <input
               type='password'
               required
+              disabled={isSubmitting}
               className='w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -92,9 +124,10 @@ export default function RegisterPage() {
 
           <button
             type='submit'
+            disabled={isSubmitting}
             className='w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300 font-semibold'
           >
-            Register
+            {isSubmitting ? 'Registering...' : 'Register'}
           </button>
 
           <p className='text-center text-sm text-gray-500 mt-4'>
